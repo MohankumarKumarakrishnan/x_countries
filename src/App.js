@@ -1,15 +1,36 @@
 import { useEffect, useState } from "react";
-//import "./styles.css";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
-      .then((data) => setCountries(data))
-      .catch((err) => console.error("Error fetching data:", err));
+    fetch("https://xcountries-backend.azurewebsites.net/all")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setCountries(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error.message);
+        setError(error.message);
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const cardStyle = {
     width: "200px",
@@ -32,7 +53,7 @@ export default function App() {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    alignItems: "ceter",
+    alignItems: "center", // Corrected typo here
     height: "100vh",
   };
 
