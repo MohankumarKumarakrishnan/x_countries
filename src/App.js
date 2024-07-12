@@ -3,13 +3,24 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setCountries(data))
-      .catch((error) => console.error("Error fetching data: ", error.message));
+      .catch((error) => {
+        console.error("Error fetching data: ", error.message);
+        setError(error.message);
+      });
   }, []);
+
+  
 
   const cardStyle = {
     width: "200px",
