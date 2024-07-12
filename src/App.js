@@ -14,6 +14,7 @@ export default function App() {
         return res.json();
       })
       .then((data) => {
+        console.log("Fetched data:", data); 
         setCountries(data);
         setLoading(false);
       })
@@ -53,7 +54,7 @@ export default function App() {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    alignItems: "center", // Corrected typo here
+    alignItems: "center",
     height: "100vh",
   };
 
@@ -62,11 +63,11 @@ export default function App() {
       {countries.map((country) => (
         <div key={country.cca3} style={cardStyle}>
           <img
-            src={country.flags.png}
-            alt={`Flag of ${country.name.common}`}
+            src={country.flag}
+            alt={`Flag of ${country.abbr}`}
             style={imageStyle}
           />
-          <h2>{country.name.common}</h2>
+          <h2>{country.name}</h2>
         </div>
       ))}
     </div>
