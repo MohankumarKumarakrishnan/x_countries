@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -13,13 +14,20 @@ export default function App() {
         }
         return res.json();
       })
-      .then((data) => setCountries(data))
+      .then((data) => {
+        setCountries(data);
+        setLoading(false);
+      })
       .catch((error) => {
         console.error("Error fetching data: ", error.message);
         setError(error.message);
+        setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   
 
   const cardStyle = {
